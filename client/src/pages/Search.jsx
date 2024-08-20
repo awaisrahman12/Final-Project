@@ -6,7 +6,6 @@ export default function Search() {
   const navigate = useNavigate();
   const [sidebardata, setSidebardata] = useState({
     searchTerm: '',
-    offer: false,
     sort: 'created_at',
     order: 'desc',
   });
@@ -18,19 +17,12 @@ export default function Search() {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get('searchTerm');
-    const offerFromUrl = urlParams.get('offer');
     const sortFromUrl = urlParams.get('sort');
     const orderFromUrl = urlParams.get('order');
 
-    if (
-      searchTermFromUrl ||
-      offerFromUrl ||
-      sortFromUrl ||
-      orderFromUrl
-    ) {
+    if (searchTermFromUrl || sortFromUrl || orderFromUrl) {
       setSidebardata({
         searchTerm: searchTermFromUrl || '',
-        offer: offerFromUrl === 'true' ? true : false,
         sort: sortFromUrl || 'created_at',
         order: orderFromUrl || 'desc',
       });
@@ -59,13 +51,6 @@ export default function Search() {
       setSidebardata({ ...sidebardata, searchTerm: e.target.value });
     }
 
-    if (e.target.id === 'offer') {
-      setSidebardata({
-        ...sidebardata,
-        [e.target.id]: e.target.checked || e.target.checked === 'true' ? true : false,
-      });
-    }
-
     if (e.target.id === 'sort_order') {
       const sort = e.target.value.split('_')[0] || 'created_at';
       const order = e.target.value.split('_')[1] || 'desc';
@@ -78,7 +63,6 @@ export default function Search() {
     e.preventDefault();
     const urlParams = new URLSearchParams();
     urlParams.set('searchTerm', sidebardata.searchTerm);
-    urlParams.set('offer', sidebardata.offer);
     urlParams.set('sort', sidebardata.sort);
     urlParams.set('order', sidebardata.order);
     const searchQuery = urlParams.toString();
@@ -115,19 +99,6 @@ export default function Search() {
               value={sidebardata.searchTerm}
               onChange={handleChange}
             />
-          </div>
-          <div className='flex gap-2 flex-wrap items-center'>
-            <label className='font-semibold'>Offer:</label>
-            <div className='flex gap-2'>
-              <input
-                type='checkbox'
-                id='offer'
-                className='w-5'
-                onChange={handleChange}
-                checked={sidebardata.offer}
-              />
-              <span>Offer</span>
-            </div>
           </div>
           <div className='flex items-center gap-2'>
             <label className='font-semibold'>Sort:</label>
